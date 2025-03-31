@@ -1,0 +1,260 @@
+\documentclass[twocolumn,prd,nofootinbib]{revtex4}
+%\newcommand\ForRichardOnly[1]{#1}
+\newcommand\ForRichardOnly[1]{}
+\usepackage{verbatim}
+\usepackage{color}     % color text
+\usepackage{framed}
+\definecolor{shadecolor}{gray}{0.95}
+\usepackage{amsmath}
+\usepackage{graphicx}  % extend graphics
+\usepackage{tabularx}
+\usepackage{wrapfig}   % wrap text around figures, if desired
+\usepackage{hyperref}
+
+%\newcommand\ForInternalReference[1]{#1}
+\newcommand\ForInternalReference[1]{}
+\newcommand\editremark[1]{{\color{red} #1}}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand\unit[1]{{\rm #1}}
+\newcommand\Y[1]{Y^{(#1)}{}}
+% GR tools
+\newcommand\prederiv[2]{{}^{(#1)}#2}
+\newcommand\dualBack{*}
+\newcommand\dualForward{\star}
+\newcommand\avL{\left< {\cal L}_{(a} {\cal L}_{b)} \right>}
+\newcommand\WeylScalar{{\psi_4}}
+\newcommand\WeylScalarFourier{{\tilde{\psi}_4}}
+\newcommand\mc{{{\cal M}_c}}
+% QM TOOLS
+\newcommand\qmstate[1]{\left|#1\right \rangle}
+\newcommand\qmstateKet[1]{\left\langle#1\right|}
+\newcommand\qmstateproduct[2]{\left\langle#1|#2\right\rangle}
+\newcommand\qmoperatorelement[3]{\left\langle#1\left|#2\right|#3\right\rangle}
+\newcommand\qmoperator[1]{{\bf #1}}
+
+
+% NUMBERS
+\newcommand\nEventsMDC{450}
+\newcommand\BS{{\sc Bayestar}}
+\newcommand\gstlal{{\sc GSTlal}}
+\newcommand\Like{{\cal L}}
+\newcommand\LikeRed{{{\cal L}_{\rm red}}}
+
+% CITATIONS
+\newcommand\citeMCMC{\cite{LIGO-CBC-S6-PE,2011PhRvD..83h2002D,2011PhRvD..84f2003C,gr-extensions-tests-Europeans2011,gwastro-mergers-PE-Aylott-LIGOATest,2011ApJ...739...99N,2012PhRvD..85j4045V,gw-astro-PE-Raymond,gw-astro-PE-lalinference-v1}}
+\newcommand\citeFisher{\cite{1995PhRvD..52..848P,2008PhRvD..77d2001V,2008CQGra..25r4007C,2010PhRvD..82l4065V,gwastro-mergers-HeeSuk-FisherMatrixWithAmplitudeCorrections}}
+
+% JOURNALS
+\newcommand\pasp{PASP}
+\newcommand\araa{ARAA}
+\newcommand\mnras{MNRAS}
+\newcommand\physrep{Phys. Rep.}
+\newcommand\cqg{CQG}
+
+% 
+\newcommand\itrprm{\vec{\lambda}}
+\newcommand\etrprm{\vec{\theta}}
+
+
+\begin{document}
+
+\title{Rapid, embarassingly parallel parameter estimation of gravitational waves from compact binary coalescences}
+\author{P. Brady}
+\email{patrick@gravity.phys.uwm.edu}
+\affiliation{Center for Gravitation and Cosmology, University of Wisconsin-Milwaukee, Milwaukee, WI 53201, USA }
+\author{E. Ochsner}
+\email{evano@gravity.phys.uwm.edu}
+\affiliation{Center for Gravitation and Cosmology, University of Wisconsin-Milwaukee, Milwaukee, WI 53201, USA }
+\author{R. O'Shaughnessy}
+\email{oshaughn@gravity.phys.uwm.edu}
+\affiliation{Center for Gravitation and Cosmology, University of Wisconsin-Milwaukee, Milwaukee, WI 53201, USA }
+\author{C. Pankow}
+\email{pankow@gravity.phys.uwm.edu}
+\affiliation{Center for Gravitation and Cosmology, University of Wisconsin-Milwaukee, Milwaukee, WI 53201, USA }
+
+\begin{abstract}
+We  introduce an alternative, highly-parallelizable architecture for compact binary parameter estimation.   
+%   
+First, by using a mode decomposition  ($h_{lm}$) to represent each physically distinct source and by
+prefiltering the data against those modes, we can efficiently evaluate the likelihood for generic source positions and
+orientations, independent of waveform length or generation time.   
+% 
+Second, by integrating over all observer-dependent (extrinsic) parameters and by using a purely Monte Carlo
+integration strategy, we can efficiently \emph{parallelize} our calculation over the intrinsic and extrinsic space.  
+%
+Third, we use existing gravitational-wave searches to identify specific intrinsic (and extrinsic) parameters for further
+investigation.  
+% POINT: Conclusion: Code is fast
+As  proof of concept, we have implemented this algorithm using standard time-domain waveforms in a
+production environment, processing  each event in less than 1 hour, using roughly $1000$ cores in parallel,
+producing posteriors and evidence with reproducibly small statistical errors (i.e., $\lesssim 1\%$ for both).   
+%
+%
+As our code has bounded runtime, almost independent of the starting frequency for the signal, a nearly-unchanged strategy could
+ estimate NS-NS parameters in the aLIGO era.  
+% POINT: Mention *operational* for EOBNRv2HM
+Our algorithm is both ready-to-use and efficient for any noise curve and existing time-domain model at any mass, including
+slow-to-evaluate waveforms like EOBNRv2HM.  
+\end{abstract}
+\maketitle
+
+\begin{widetext}
+{\color{red}\textbf{Draft, not for distribution except by permission of the authors}}
+
+{\color{blue}\textbf{For other authors}: Enable internal-use info (development plans; future project ideas; feedback notes) via changing the
+  definition of \texttt{\\ForInternalReference}}
+\end{widetext}
+
+
+\ForInternalReference{
+\begin{widetext}
+\section*{Outline}
+The first level of bullets are proposed sections. 
+The second level of bullets (except in Executive Summary) are proposed subsections.
+The third level of bullets are points to make in each subsection.
+
+Section headings added, including reminders re dotting i's/crossing t's.
+
+\begin{itemize}
+\item Executive Summary
+	\begin{itemize}
+	\item Goal: Rapid parameter estimation of CBC GW signals -- target is a few minutes!
+	\item Trick \# 1: use mode decomposition and compute $( h_{\ell m} | d )$ once for each mass pair.
+		Extremely fast likelihood evaluation as extrinsic parameters are varied.
+	\item Trick \# 2: Abandon Markov chain/ nested sampling. They have nice convergence in high dimensions,
+		but are serial. Instead, use brute force grid and Monte Carlo technique. Convergence worse in a sense,
+		but embarassingly parallel and very rapid evaluations thanks to trick \# 1.
+	\item Essentially same cost regardless of waveform evaluation speed. Therefore can use very long signals 
+		and/or expensive models like EOB. 
+	\end{itemize}
+
+\item Methods
+	\begin{itemize}
+        \item Background
+           
+	\item Likelihood evaluation
+		\begin{itemize}
+		\item Start with expression for ${\cal L}$. 
+		\item Show steps to get in terms of $( h_{\ell m} | d )$.
+		\item Note how all extrinsic parameters enter in $Y_{\ell m}$'s and $F_+$, $F_\times$, and thus we can
+			evaluate likelihood cheaply for any extrinsic parameters if we fix the intrinsic ones.
+		\end{itemize}
+		
+		
+	\item Integration over extrinsic parameters
+		\begin{itemize}
+		\item Do a basic Monte Carlo integral over  extrinsic parameters, at fixed intrinsic parameters
+                        Priors (e.g., time window)
+%		\item Describe any fancy pants adaption, use of skymaps, etc. 
+		\end{itemize}
+                \begin{itemize}
+  	         \item Time marginalization  \textbf{subsection of extrinsic} 
+		  \begin{itemize}
+		  \item Inverse FFT trick gives $(h_{\ell m}(t_c) | d)$ for all values of $t_c$ at once.
+		  \item We just sum over a reasonably sized window $\sim 10$ ms. 
+		  \end{itemize}
+                 \item Adaptation (in distance)
+                 \item Targeted sampling : skymaps
+                \end{itemize}
+
+	\item Covering the intrinsic parameters
+		\begin{itemize}
+		\item Describe effective Fisher approach to laying out mass points.
+		\item Point out quite flexible: can do random or fixed grid, can change ellipse size, distribution inside ellipse,
+			could do several ellipses centered on different points. [?]
+		\item Point out difficult to go to many intrinsic dimensions. Right now we focus on 2D non-spinning, 
+			but 3D or 4D is possibly feasible.
+			Precession would be very tough. 
+			Maybe an approximate metric or help from ROM could save the day. [?]
+		\end{itemize}
+		
+	
+	\item Postprocessing [?]
+		\begin{itemize}
+		\item Do we need to say anything about collating results, making triplots, P-P plots, etc.?
+
+                  Yes, it's nontrivial for linear spoked.
+		\end{itemize}
+
+	\end{itemize}
+
+\item Results: Production environment
+	\begin{itemize}
+          \item Describe the BNS MDC, from which our examples are drawn
+	\item Show posteriors, convince reader they're similar enough to usual Bayesian PE to be trusted.
+	\item P-P plots for an ensemble of physical injections (including spin). Show our results are self-consistent.
+
+          Malmquist/selection bias.  
+	\item Brief (not more than 1-2 paragraphs, 1 simple plot/table) results confirming 
+		that our method scales favorably with $f_{\rm min}$ and/or EOB. 
+	\end{itemize}
+
+\item Conclusions -- self-explanatory.
+
+\item Appendices -- Put detailed technical asides here.
+
+  \begin{itemize}
+    \item Notation
+    \item Data handling: data rate and data selection (time window), psd estimate, inverse spectrum truncation,
+      windowing (or not)
+  \item Results: Targeted investigations
+
+  -    DAGs on a single event
+
+  - DAGs using the same physics (zero spin) as our model
+
+
+  \item General and adaptive monte carlo: For-future-reference stuff, including
+
+    - uniform and variance-minimizing weighting to combine integral results with different samplers
+
+  \end{itemize}
+
+\end{itemize}
+
+Citations: Bayesian methods and monte carlo integration \cite{2011RvMP...83..943V}, including numerical recipes and Lepage; comparison
+to other PE methods for LIGO
+(MCMC,nested sampling) \cite{LIGO-CBC-S6-PE,2011PhRvD..83h2002D,2011PhRvD..84f2003C,gr-extensions-tests-Europeans2011,gwastro-mergers-PE-Aylott-LIGOATest,2011ApJ...739...99N,2012PhRvD..85j4045V,gw-astro-PE-Raymond,gw-astro-PE-lalinference-v1}
+
+\tableofcontents
+
+\end{widetext}
+}
+\section{Introduction}
+\input{introduction.tex}
+
+\section{Executive Summary}
+\input{executive_summary.tex}
+
+\section{Binary Waveforms}
+\input{waveforms.tex}
+
+\section{Methods}
+\input{methods.tex}
+
+\section{Results: Production environment}
+\input{results.tex}
+
+\section{Significance and Comparison with related work }
+\input{significance_and_comparison.tex}
+
+\section{Conclusions}
+\input{conclusions.tex}
+
+\appendix
+
+\section{Notation, definitions, and equations}
+\input{notation_etc.tex}
+
+\section{Discrete data handling}
+\input{data_handling.tex}
+
+\ForInternalReference{
+\input{appendices.tex}
+}
+
+\bibliography{overviewexport}
+\end{document}

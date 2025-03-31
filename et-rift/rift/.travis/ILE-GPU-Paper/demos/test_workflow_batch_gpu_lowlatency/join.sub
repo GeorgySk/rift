@@ -1,0 +1,12 @@
+universe = vanilla
+executable = /usr/local/bin/util_ILEdagPostprocess.sh
+arguments = " /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_ile /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/consolidated_$(macroiteration)  "
+getenv = True
+requirements = 
+periodic_remove = JobStatus =?= 2 && (CurrentTime - JobStartDate) > ( 7200)
+request_disk = 10M
+log = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_con/logs/con-$(cluster)-$(process).log
+error = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_con/logs/con-$(cluster)-$(process).err
+output = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_con/logs/con-$(cluster)-$(process).out
+notification = never
+queue 1

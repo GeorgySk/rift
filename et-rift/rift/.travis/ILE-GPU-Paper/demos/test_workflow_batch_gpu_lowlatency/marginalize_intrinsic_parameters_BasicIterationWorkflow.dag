@@ -1,0 +1,159 @@
+JOB 104b29c8db2cc81da2a79dfaf1cad4ff ILE.sub
+RETRY 104b29c8db2cc81da2a79dfaf1cad4ff 0
+VARS 104b29c8db2cc81da2a79dfaf1cad4ff macroevent="0" macrongroup="20" macroiteration="0"
+JOB 1eb242aaddd48fdb81dab254e9c90bde ILE.sub
+RETRY 1eb242aaddd48fdb81dab254e9c90bde 0
+VARS 1eb242aaddd48fdb81dab254e9c90bde macroevent="20" macrongroup="20" macroiteration="0"
+JOB af3de7fc80d4a850fce3efbbcd6a6010 ILE.sub
+RETRY af3de7fc80d4a850fce3efbbcd6a6010 0
+VARS af3de7fc80d4a850fce3efbbcd6a6010 macroevent="40" macrongroup="20" macroiteration="0"
+JOB 286235e12ea04ad55380765c57ef48c6 ILE.sub
+RETRY 286235e12ea04ad55380765c57ef48c6 0
+VARS 286235e12ea04ad55380765c57ef48c6 macroevent="60" macrongroup="20" macroiteration="0"
+JOB bbe3e37ab9ea0fadca2822980d2a3bbf ILE.sub
+RETRY bbe3e37ab9ea0fadca2822980d2a3bbf 0
+VARS bbe3e37ab9ea0fadca2822980d2a3bbf macroevent="80" macrongroup="20" macroiteration="0"
+JOB 81d6294bc326197238d45fc2a4a5ec50 join.sub
+RETRY 81d6294bc326197238d45fc2a4a5ec50 0
+VARS 81d6294bc326197238d45fc2a4a5ec50 macroiteration="0"
+JOB d0e9e237e35ba685316a5d03d4aad19b unify.sub
+RETRY d0e9e237e35ba685316a5d03d4aad19b 0
+VARS d0e9e237e35ba685316a5d03d4aad19b macroiteration="0"
+JOB eec4a35c3a006c9bbe93670e9bc93731 CIP.sub
+RETRY eec4a35c3a006c9bbe93670e9bc93731 0
+VARS eec4a35c3a006c9bbe93670e9bc93731 macroiteration="0" macroiterationnext="1"
+CATEGORY eec4a35c3a006c9bbe93670e9bc93731 CIP
+JOB ab4dc5aef783e918e832ba070bbe140b convert.sub
+RETRY ab4dc5aef783e918e832ba070bbe140b 0
+VARS ab4dc5aef783e918e832ba070bbe140b macroiteration="1" macroiterationlast="0"
+CATEGORY ab4dc5aef783e918e832ba070bbe140b CONVERT
+JOB cfa6419515e43f4e9099fc7a1b4cc0cb ILE.sub
+RETRY cfa6419515e43f4e9099fc7a1b4cc0cb 0
+VARS cfa6419515e43f4e9099fc7a1b4cc0cb macroevent="0" macrongroup="20" macroiteration="1"
+JOB 0b8bb6762abf0233b99c8d522cc8c0b7 join.sub
+RETRY 0b8bb6762abf0233b99c8d522cc8c0b7 0
+VARS 0b8bb6762abf0233b99c8d522cc8c0b7 macroiteration="1"
+JOB 03907890428272a483c024fcc0f52043 unify.sub
+RETRY 03907890428272a483c024fcc0f52043 0
+VARS 03907890428272a483c024fcc0f52043 macroiteration="1"
+JOB 02e2a50eca5fa22d03a7717d9cb737a4 CIP.sub
+RETRY 02e2a50eca5fa22d03a7717d9cb737a4 0
+VARS 02e2a50eca5fa22d03a7717d9cb737a4 macroiteration="1" macroiterationnext="2"
+CATEGORY 02e2a50eca5fa22d03a7717d9cb737a4 CIP
+JOB 4d455fcc5834ab870fbdcc9980150cba convert.sub
+RETRY 4d455fcc5834ab870fbdcc9980150cba 0
+VARS 4d455fcc5834ab870fbdcc9980150cba macroiteration="2" macroiterationlast="1"
+CATEGORY 4d455fcc5834ab870fbdcc9980150cba CONVERT
+JOB 5fdd3933765f925800df7fd5cbbe309c test.sub
+RETRY 5fdd3933765f925800df7fd5cbbe309c 0
+VARS 5fdd3933765f925800df7fd5cbbe309c macroiteration="2" macroiterationlast="1"
+CATEGORY 5fdd3933765f925800df7fd5cbbe309c CONVERGE
+JOB 2940fe429409d9d41c4dacd26d573ff9 ILE.sub
+RETRY 2940fe429409d9d41c4dacd26d573ff9 0
+VARS 2940fe429409d9d41c4dacd26d573ff9 macroevent="0" macrongroup="20" macroiteration="2"
+JOB 4ca4f6a899858a8be737458aa05d073f join.sub
+RETRY 4ca4f6a899858a8be737458aa05d073f 0
+VARS 4ca4f6a899858a8be737458aa05d073f macroiteration="2"
+JOB 4872c8d72b9d5f21602abfaf950ed34a unify.sub
+RETRY 4872c8d72b9d5f21602abfaf950ed34a 0
+VARS 4872c8d72b9d5f21602abfaf950ed34a macroiteration="2"
+JOB 77f205251a8e36aa26f40da100ab1822 CIP.sub
+RETRY 77f205251a8e36aa26f40da100ab1822 0
+VARS 77f205251a8e36aa26f40da100ab1822 macroiteration="2" macroiterationnext="3"
+CATEGORY 77f205251a8e36aa26f40da100ab1822 CIP
+JOB 591165ef6c2e03b86973cda6ef7c3135 convert.sub
+RETRY 591165ef6c2e03b86973cda6ef7c3135 0
+VARS 591165ef6c2e03b86973cda6ef7c3135 macroiteration="3" macroiterationlast="2"
+CATEGORY 591165ef6c2e03b86973cda6ef7c3135 CONVERT
+JOB 8c58501d0de55ce2edfb1db81597a414 test.sub
+RETRY 8c58501d0de55ce2edfb1db81597a414 0
+VARS 8c58501d0de55ce2edfb1db81597a414 macroiteration="3" macroiterationlast="2"
+CATEGORY 8c58501d0de55ce2edfb1db81597a414 CONVERGE
+JOB 24eb7a953096bc3c165af9693d649707 ILE.sub
+RETRY 24eb7a953096bc3c165af9693d649707 0
+VARS 24eb7a953096bc3c165af9693d649707 macroevent="0" macrongroup="20" macroiteration="3"
+JOB d4bc3dbfc2b199fa4257f625474aca60 join.sub
+RETRY d4bc3dbfc2b199fa4257f625474aca60 0
+VARS d4bc3dbfc2b199fa4257f625474aca60 macroiteration="3"
+JOB fe4c58a0e04db8f270a60fc93b39e388 unify.sub
+RETRY fe4c58a0e04db8f270a60fc93b39e388 0
+VARS fe4c58a0e04db8f270a60fc93b39e388 macroiteration="3"
+JOB cbeb5c86f4faf30e48ea9ee7d65baa67 CIP.sub
+RETRY cbeb5c86f4faf30e48ea9ee7d65baa67 0
+VARS cbeb5c86f4faf30e48ea9ee7d65baa67 macroiteration="3" macroiterationnext="4"
+CATEGORY cbeb5c86f4faf30e48ea9ee7d65baa67 CIP
+JOB 7ae69081467357e3e1bc77754d7c938e convert.sub
+RETRY 7ae69081467357e3e1bc77754d7c938e 0
+VARS 7ae69081467357e3e1bc77754d7c938e macroiteration="4" macroiterationlast="3"
+CATEGORY 7ae69081467357e3e1bc77754d7c938e CONVERT
+JOB 5d19c4a2ef1bc322aeca7e4f0bff1aa6 test.sub
+RETRY 5d19c4a2ef1bc322aeca7e4f0bff1aa6 0
+VARS 5d19c4a2ef1bc322aeca7e4f0bff1aa6 macroiteration="4" macroiterationlast="3"
+CATEGORY 5d19c4a2ef1bc322aeca7e4f0bff1aa6 CONVERGE
+JOB 43e596f96c27b0897b8424f230f3944c ILE.sub
+RETRY 43e596f96c27b0897b8424f230f3944c 0
+VARS 43e596f96c27b0897b8424f230f3944c macroevent="0" macrongroup="20" macroiteration="4"
+JOB 19085f45f696d2418379a2e5bcb5b17d join.sub
+RETRY 19085f45f696d2418379a2e5bcb5b17d 0
+VARS 19085f45f696d2418379a2e5bcb5b17d macroiteration="4"
+JOB 7d65e0d1b87dee7379c62bc547ebe21e unify.sub
+RETRY 7d65e0d1b87dee7379c62bc547ebe21e 0
+VARS 7d65e0d1b87dee7379c62bc547ebe21e macroiteration="4"
+JOB 52f3eed97d6725f346b9eff487f24b57 CIP.sub
+RETRY 52f3eed97d6725f346b9eff487f24b57 0
+VARS 52f3eed97d6725f346b9eff487f24b57 macroiteration="4" macroiterationnext="5"
+CATEGORY 52f3eed97d6725f346b9eff487f24b57 CIP
+JOB fb5a68c66b1fcbee4b667e1f515d23c6 convert.sub
+RETRY fb5a68c66b1fcbee4b667e1f515d23c6 0
+VARS fb5a68c66b1fcbee4b667e1f515d23c6 macroiteration="5" macroiterationlast="4"
+CATEGORY fb5a68c66b1fcbee4b667e1f515d23c6 CONVERT
+JOB 137ee2896d2cc5ad397630bcaf6cb0e4 test.sub
+RETRY 137ee2896d2cc5ad397630bcaf6cb0e4 0
+VARS 137ee2896d2cc5ad397630bcaf6cb0e4 macroiteration="5" macroiterationlast="4"
+CATEGORY 137ee2896d2cc5ad397630bcaf6cb0e4 CONVERGE
+JOB afbdeedc142670b129ca86101509d15c plot.sub
+RETRY afbdeedc142670b129ca86101509d15c 0
+VARS afbdeedc142670b129ca86101509d15c macroiteration="4" macroiterationlast="3"
+CATEGORY afbdeedc142670b129ca86101509d15c PLOT
+PARENT 104b29c8db2cc81da2a79dfaf1cad4ff CHILD 81d6294bc326197238d45fc2a4a5ec50
+PARENT 1eb242aaddd48fdb81dab254e9c90bde CHILD 81d6294bc326197238d45fc2a4a5ec50
+PARENT af3de7fc80d4a850fce3efbbcd6a6010 CHILD 81d6294bc326197238d45fc2a4a5ec50
+PARENT 286235e12ea04ad55380765c57ef48c6 CHILD 81d6294bc326197238d45fc2a4a5ec50
+PARENT bbe3e37ab9ea0fadca2822980d2a3bbf CHILD 81d6294bc326197238d45fc2a4a5ec50
+PARENT 81d6294bc326197238d45fc2a4a5ec50 CHILD d0e9e237e35ba685316a5d03d4aad19b
+PARENT d0e9e237e35ba685316a5d03d4aad19b CHILD eec4a35c3a006c9bbe93670e9bc93731
+PARENT eec4a35c3a006c9bbe93670e9bc93731 CHILD ab4dc5aef783e918e832ba070bbe140b
+PARENT ab4dc5aef783e918e832ba070bbe140b CHILD cfa6419515e43f4e9099fc7a1b4cc0cb
+PARENT cfa6419515e43f4e9099fc7a1b4cc0cb CHILD 0b8bb6762abf0233b99c8d522cc8c0b7
+PARENT 0b8bb6762abf0233b99c8d522cc8c0b7 CHILD 03907890428272a483c024fcc0f52043
+PARENT 03907890428272a483c024fcc0f52043 CHILD 02e2a50eca5fa22d03a7717d9cb737a4
+PARENT 02e2a50eca5fa22d03a7717d9cb737a4 CHILD 4d455fcc5834ab870fbdcc9980150cba
+PARENT 4d455fcc5834ab870fbdcc9980150cba CHILD 5fdd3933765f925800df7fd5cbbe309c
+PARENT 5fdd3933765f925800df7fd5cbbe309c CHILD 2940fe429409d9d41c4dacd26d573ff9
+PARENT 2940fe429409d9d41c4dacd26d573ff9 CHILD 4ca4f6a899858a8be737458aa05d073f
+PARENT 4ca4f6a899858a8be737458aa05d073f CHILD 4872c8d72b9d5f21602abfaf950ed34a
+PARENT 4872c8d72b9d5f21602abfaf950ed34a CHILD 77f205251a8e36aa26f40da100ab1822
+PARENT 77f205251a8e36aa26f40da100ab1822 CHILD 591165ef6c2e03b86973cda6ef7c3135
+PARENT 591165ef6c2e03b86973cda6ef7c3135 CHILD 8c58501d0de55ce2edfb1db81597a414
+PARENT 8c58501d0de55ce2edfb1db81597a414 CHILD 24eb7a953096bc3c165af9693d649707
+PARENT 24eb7a953096bc3c165af9693d649707 CHILD d4bc3dbfc2b199fa4257f625474aca60
+PARENT d4bc3dbfc2b199fa4257f625474aca60 CHILD fe4c58a0e04db8f270a60fc93b39e388
+PARENT fe4c58a0e04db8f270a60fc93b39e388 CHILD cbeb5c86f4faf30e48ea9ee7d65baa67
+PARENT cbeb5c86f4faf30e48ea9ee7d65baa67 CHILD 7ae69081467357e3e1bc77754d7c938e
+PARENT 7ae69081467357e3e1bc77754d7c938e CHILD 5d19c4a2ef1bc322aeca7e4f0bff1aa6
+PARENT 5d19c4a2ef1bc322aeca7e4f0bff1aa6 CHILD 43e596f96c27b0897b8424f230f3944c
+PARENT 43e596f96c27b0897b8424f230f3944c CHILD 19085f45f696d2418379a2e5bcb5b17d
+PARENT 19085f45f696d2418379a2e5bcb5b17d CHILD 7d65e0d1b87dee7379c62bc547ebe21e
+PARENT 7d65e0d1b87dee7379c62bc547ebe21e CHILD 52f3eed97d6725f346b9eff487f24b57
+PARENT 52f3eed97d6725f346b9eff487f24b57 CHILD fb5a68c66b1fcbee4b667e1f515d23c6
+PARENT fb5a68c66b1fcbee4b667e1f515d23c6 CHILD 137ee2896d2cc5ad397630bcaf6cb0e4
+PARENT 137ee2896d2cc5ad397630bcaf6cb0e4 CHILD afbdeedc142670b129ca86101509d15c
+ABORT-DAG-ON 5fdd3933765f925800df7fd5cbbe309c 1 RETURN 0 
+ABORT-DAG-ON 8c58501d0de55ce2edfb1db81597a414 1 RETURN 0 
+ABORT-DAG-ON 5d19c4a2ef1bc322aeca7e4f0bff1aa6 1 RETURN 0 
+ABORT-DAG-ON 137ee2896d2cc5ad397630bcaf6cb0e4 1 RETURN 0 
+SCRIPT POST 03907890428272a483c024fcc0f52043 /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/confirm_exist.sh /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/consolidated_0.composite 
+SCRIPT POST 4872c8d72b9d5f21602abfaf950ed34a /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/confirm_exist.sh /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/consolidated_1.composite 
+SCRIPT POST fe4c58a0e04db8f270a60fc93b39e388 /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/confirm_exist.sh /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/consolidated_2.composite 
+SCRIPT POST 7d65e0d1b87dee7379c62bc547ebe21e /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/confirm_exist.sh /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/consolidated_3.composite 
+DOT my_dag_vis.dot 

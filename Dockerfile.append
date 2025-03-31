@@ -1,0 +1,74 @@
+# Add here any workload-specific Dockerfile instructions.
+# They will be appended to the Dockerfile generated from a common template.
+
+# Install CUDA - see https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#redhat-installation
+# [NB: this is needed for the GPU version, but affects the CPU version: if CUDA is available, CURAND is used from C++]
+RUN yum install -y \
+       dnf-plugins-core \
+       https://linuxsoft.cern.ch/wlcg/el9/x86_64/wlcg-repo-1.0.0-1.el9.noarch.rpm && \
+    yum clean all && \
+    dnf config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo ;
+
+RUN yum install -y \
+    cuda && \
+    yum clean all
+
+# install Python according to https://wiki.crowncloud.net/?How_to_Install_Python_3_10_on_AlmaLinux_9
+RUN dnf install -y wget yum-utils make gcc openssl-devel bzip2-devel libffi-devel zlib-devel
+RUN dnf update -y
+RUN wget https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz && \
+    tar xzf Python-3.10.5.tgz && \
+    cd Python-3.10.5 && \
+    ./configure --with-system-ffi --with-computed-gotos --enable-loadable-sqlite-extensions && \
+    make -j ${nproc} && \
+    make altinstall
+
+RUN dnf install -y glibc-langpack-en
+
+# removed build-essential. Is it necessary?
+RUN yum install -y \
+    cmake \
+    g++ \
+    wget \
+    python3-pip \
+    curl \
+    bc \
+    git
+
+# removed locale-gen en_US.UTF-8
+
+RUN ln -s /usr/bin/python3.10 /usr/local/bin/python3
+RUN ln -s /usr/bin/python3 /usr/local/bin/python
+
+RUN yum install -y python3-devel
+
+RUN cd /opt && \
+    mkdir installed_RIFT && \
+    cd installed_RIFT && \
+    git clone https://github.com/oshaughn/research-projects-RIT.git && \
+    cd research-projects-RIT && \
+    pip3 install --upgrade pip && \
+    pip3 install --upgrade setuptools --break-system-packages && \
+    pip3 install -e .
+
+# pyseobnr
+RUN yum install gsl-devel -y
+RUN dnf install fftw-devel -y
+RUN pip3 install pyseobnr
+
+# Install additional Python packages
+RUN pip3 install asimov>=0.5.6 \
+    asimov-gwdata>=0.4.0 \
+    cupy-cuda11x \
+    gwdatafind==1.2.0 \
+    gwosc>=0.7.1 \
+    lalsuite>=7.26 \
+    numpy>=1.24.4 \
+    natsort \
+    pybind11>=2.12 \
+    scipy>=1.9.3
+
+# Set environment variables
+RUN alias python=python3
+
+COPY ./et-rift /bmk/build/et

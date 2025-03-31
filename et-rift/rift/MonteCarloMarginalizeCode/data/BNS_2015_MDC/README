@@ -1,0 +1,90 @@
+Files/Scripts that you will need to do *all* of the targets (those not included in our standard suite)
+
+1. H1L1-ALL_LLOID_1_injections-966384015-5184000.sqlite
+    - To get coinc information (masses, snr)
+    - At CIT: /home/alexander.urban/Raven/2015/bayestar_injection_run/H1L1-ALL_LLOID_1_injections-966384015-5184000.sqlite
+    - At UWM: /home/pankow/research-projects/MonteCarloMarginalizeCode/data/BNS_2015_MDC/H1L1-ALL_LLOID_1_injections-966384015-5184000.sqlite
+
+2. skyloc_coincs_far.txt
+    - on the web: https://ldas-jobs.phys.uwm.edu/~lsinger/skyloc_coincs_far.txt
+
+3. BAYESTAR skymaps
+    - UWM: /home/pankow/research-projects/MonteCarloMarginalizeCode/data/BNS_2015_MDC/2015/bayestar_injection_run/fits/
+    - MIT: /home/pankow/research-projects/MonteCarloMarginalizeCode/data/BNS_2015_MDC/2015/bayestar_injection_run/fits/
+    - CIT: /home/alexander.urban/Raven/2015/bayestar_injection_run/fits/
+
+
+-- Stage analysis directory --
+There is a top level Makefile and a Makefile.template, the former is used to perform actions over all analysis directories and the latter is copied to individual analysis directories. Most of the work is done by the Makefile in the analysis directory.
+
+-- To create an analysis directory from a sim_inspiral table --
+
+Use stage_injections: 
+
+python stage_injections -s 2015_BNS_injections.xml.gz -S [sim_id_1] -S [sim_id_2] ...
+
+One can give an individual sim ids to stage from the injections XML (2015_BNS_injections.xml) or if no additional arguments are given, it will check the condition (currently all injections between 10 < d < 50 Mpc) and do each.
+
+This will create a sim_id_X directory with a Makefile and a mdc.xml.gz. This file contains the sim inspiral row you selected.
+
+-- To create an analysis directory from a coinc_inspiral table --
+
+Use stage_injections: 
+
+python stage_injections -c H1L1-ALL_LLOID_1_injections-966384015-5184000.sqlite -s 2015_BNS_injections.xml.gz -S [sim_id_1] -S [sim_id_2] ...
+
+Note that the sim_id_X is not a typo. The script will look for the coinc associated with the given injection and use it to set up the rest of the run. It should inform you of the mapping it makes.
+
+This will create a coinc_id_X directory with a Makefile and a coinc.xml.gz. This file contains the sim_inspiral, the corresponding coinc_inspiral, and the sngl_inspirals that were coincided to obtain the coinc. This is necessary because the coinc_inspiral does not contain all the necessary information to run (namely mass1/2).
+
+-- To create an analysis directory from a coinc_inspiral table --
+
+Use stage_injections: 
+
+python stage_injections -c H1L1-ALL_LLOID_1_injections-966384015-5184000.sqlite -s 2015_BNS_injections.xml -f skyloc_coincs_far.txt -b 0 -e 100
+
+This will use the coinc db and sim XML to stage events 0 through 100 from the skyloc_coincs_far.txt file. The remainder of the coinc based instructions above now apply.
+
+-- To create an analysis directory from a coinc_inspiral table and use a BAYESTAR skymap --
+
+Use stage_injections: 
+
+python stage_injections -c H1L1-ALL_LLOID_1_injections-966384015-5184000.sqlite -s 2015_BNS_injections.xml -f skyloc_coincs_far.txt -b 0 -e 100 -B path/to/skymaps/
+
+-- To set up an individual analysis directory --
+
+Going into the specific directory and running:
+
+    make -o L1_measured_PSD.xml.gz -o H1_measured_PSD.xml.gz -j marginalize_extrinsic_parameters.dag
+
+will create all requisite data and DAG products.
+
+The -o files are required since the symlinks don't appear to be respected inthe same way by make targets. Otherwise each job will try and remeasure (and thus overwrite) the PSD. It doesn't matter a lot for Gaussian noise, but will for when we actually need to do this in a time varying manner.
+
+
+-- To set up all analysis directories at once --
+
+If one wishes to stage *all* the directories, the top level Makefile has the all_dirs (sim) and all_dirs_coinc (coinc) targets. Use these to do data and DAG generation in parallel.
+
+-- Running a DAG(s) --
+
+Running an individual DAG is no different than normal. To make a composite DAG from all staged events with the ``build_dag'' script, as so:
+
+    ./build_dag "sim_id_*/"
+
+Where the quotes are necessary to pass the glob directly to the script. Note that this runs all the events as SUBDAGs and so the following submit is required:
+
+condor_submit_dag -UseDagDir /path/to/dag
+
+This will force the DAG to run its own directory. I will remove the need for this soon.
+
+-- Cleaning up --
+After the DAG is completed, in the subdirectory, one can clean up and get some postrun statistics with:
+
+    make postprocess
+
+This will set up some directories and move plots and data products around. Only use this after the run has completed or you may disrupt the DAG workflow.
+
+
+
+ /home/patrick/opt/mcparamest/bin/integrate_likelihood_extrinsic  --amp-order 0 --n-eff 1000 --time-marginalization --mass1 1.45 --skymap-file 21644.toa_phoa_snr.fits.gz --save-P 0.0001 --save-deltalnL inf --n-max 1000000 --output-file 2015_bns_noise-PRB.xml.gz --convergence-tests-on False --n-chunk 1000 --save-samples --approximant TaylorT4 --reference-freq 0.0 --cache-file 2015_bns_mdc.cache --l-max 2 --mass2 1.33 --adapt-floor-level 0.1 --adapt-weight-exponent 0.081086555712 --event-time 969594665.136343002 --fmax 2000.0 --psd-file H1=H1_PSD_measured.xml.gz --psd-file L1=L1_PSD_measured.xml.gz --channel-name H1=FAKE-STRAIN --channel-name L1=FAKE-STRAIN

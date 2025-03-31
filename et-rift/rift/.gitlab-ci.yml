@@ -1,0 +1,81 @@
+variables:
+  BRANCH: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  COMMIT: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  RIFT_IMAGE: $CI_REGISTRY_IMAGE/rift
+
+
+default:
+  image: debian:latest
+
+stages:
+  - system tests
+  - unit tests # TODO: write some
+  - docs
+#  - docker image
+#  - deploy
+
+.install_docker_dependencies:
+  before_script:
+     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+     - apk add --update git py3-pip 
+     - if [ ! -e /usr/bin/python ]; then ln -s /usr/bin/python3 /usr/bin/python; fi
+
+
+before_script:
+  # setup
+  - apt-get update --assume-yes && apt-get upgrade --assume-yes && apt-get install --assume-yes git python3-pip
+  # Create alias for /usr/bin/python3 -> /usr/bin/python
+  - ln -s /usr/bin/python3 /usr/bin/python
+  # upgrade pip
+  - python -m pip install --quiet --upgrade pip  --break-system-packages
+  # install requirements
+  - python -m pip install -r requirements.txt --break-system-packages
+  # install test-only requirements
+  - python -m pip install coverage pytest --break-system-packages
+  # install this package (need editable for coverage)
+  - python -m pip install --editable . --break-system-packages
+
+help_check:
+  stage: system tests
+  script:
+    - . .travis/test-all-bin.sh
+
+import_check:
+  stage: system tests
+  script:
+    - python .travis/test-all-mod.py
+
+test_run:
+  stage: system tests
+  script:
+    - . .travis/test-coord.sh
+    - . .travis/test-integrate.sh
+    - . .travis/test-posterior.sh
+    -  bash  .travis/test-run.sh
+    -  bash .travis/test-run-alts.sh
+    -  bash .travis/test-build.sh
+
+# build:test:
+#   image: docker:latest
+#   stage: docker image
+#   extends: .install_docker_dependencies
+#   script:  
+#     - suffix=$(echo $CI_COMMIT_BRANCH | cut -d "-" -f 2)
+#     - docker build --rm --no-cache -t $RIFT_IMAGE:test --file Dockerfile .
+#     - docker push $RIFT_IMAGE:test
+
+documentation:
+  stage: docs
+  image: debian:latest
+  script:
+    - apt-get -y install graphviz
+    - cd docs
+    - pip install -r requirements.txt --break-system-packages
+    - make clean
+    - cd ..
+    - sphinx-build docs/source/ docs/build/
+
+  artifacts:
+    paths:
+      - docs/build/

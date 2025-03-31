@@ -1,0 +1,17 @@
+universe = vanilla
+executable = /usr/local/bin/util_ConstructIntrinsicPosterior_GenericCoordinates.py
+arguments = " --mc-range  '[23,35]' --eta-range  '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc --fit-method gp --verbose --lnL-offset 120 --cap-points 12000 --n-output-samples 10000 --no-plots --n-eff 10000 --no-plots  --fname /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/all.net --fname-output-samples /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/overlap-grid-$(macroiterationnext) --fname-output-integral /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/overlap-grid-$(macroiterationnext) "
+getenv = True
+request_memory = 2048M
+requirements = 
+stream_error = True
+stream_output = True
+transfer_input_files = ../all.net
+should_transfer_files = YES
+initialdir = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_cip
+request_disk = 10M
+log = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_cip/logs/cip-$(cluster)-$(process).log
+error = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_cip/logs/cip-$(cluster)-$(process).err
+output = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiteration)_cip/logs/cip-$(cluster)-$(process).out
+notification = never
+queue 1

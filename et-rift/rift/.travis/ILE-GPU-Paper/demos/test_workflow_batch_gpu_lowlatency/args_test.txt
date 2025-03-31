@@ -1,0 +1,1 @@
+X --always-succeed --method lame --parameter m1

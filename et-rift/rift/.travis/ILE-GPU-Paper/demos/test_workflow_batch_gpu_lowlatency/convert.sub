@@ -1,0 +1,13 @@
+universe = vanilla
+executable = /usr/local/bin/convert_output_format_ile2inference
+arguments = " /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/overlap-grid-$(macroiteration).xml.gz "
+getenv = True
+requirements = 
+periodic_remove = JobStatus =?= 2 && (CurrentTime - JobStartDate) > ( 7200)
+initialdir = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency
+request_disk = 10M
+log = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiterationlast)_test/logs/convert-$(cluster)-$(process).log
+error = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/iteration_$(macroiterationlast)_test/logs/convert-$(cluster)-$(process).err
+output = /home/georgy/ET/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/posterior_samples-$(macroiteration).dat
+notification = never
+queue 1
