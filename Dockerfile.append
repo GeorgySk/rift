@@ -71,4 +71,4 @@ RUN pip3 install asimov>=0.5.6 \
 # Set environment variables
 RUN alias python=python3
 
-RUN git clone git@git.ligo.org:rapidpe-rift/rift.git /bmk/build/et/rift
+RUN git clone https://git.ligo.org/rapidpe-rift/rift.git /bmk/build/et/rift
