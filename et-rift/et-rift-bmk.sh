@@ -74,7 +74,7 @@ function doOne(){
       echo "[doOne ($1)] $(date) cpuorgpus=${cpuorgpus} and a GPU is installed on this system (/dev/nvidia* found)"
       if [ "$NCOPIES" != "1" ]; then
         # Issue a warning not an error: the GPU can be shared across many processes/copies, but throughput is slower, eg lose 10% on 4 copies
-        echo "[doOne ($1)] $(date) WARNING! NCOPIES=$NCOPIES slows down madgraph4gpu 'sa' benchmarks on one GPU: a single copy ('-c 1') is recommended"
+        echo "[doOne ($1)] $(date) WARNING! NCOPIES=$NCOPIES slows down benchmarks on one GPU: a single copy ('-c 1') is recommended"
       fi
     else
       echo "[doOne ($1)] $(date) WARNING! cpuorgpus=${cpuorgpus} but no GPU is installed on this system (no /dev/nvidia* found)"
