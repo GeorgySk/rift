@@ -94,7 +94,7 @@ function usage_detailed(){
   echo "DEFAULT is '--cpu "
   echo ""
   echo "If you start the benchmark by mistake and need to kill all associated processes, run the following command:"
-  echo "  kill \$(ps -ef | egrep '(et-rift-bmk.sh|job.py|check.exe)' | grep -v grep | awk '{print \$2}')"
+  echo "  kill \$(ps -ef | egrep '(igwn-et-rift-gpu-bmk.sh|job.py|check.exe)' | grep -v grep | awk '{print \$2}')"
 }
 
 # Default values for NCOPIES, NTHREADS, NEVENTS_THREAD must be set in each benchmark

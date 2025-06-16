@@ -1,12 +1,11 @@
-HEPWL_BMKEXE=et-rift-bmk.sh
+HEPWL_BMKEXE=igwn-et-rift-gpu-bmk.sh
 HEPWL_BMKOPTS=""
-HEPWL_BMKDIR=et-rift
+HEPWL_BMKDIR=igwn-et-rift-gpu
 HEPWL_BMKDESCRIPTION="ET RIFT benchmark (2025)"
 HEPWL_BMKOS="gitlab-registry.cern.ch/linuxsupport/alma9-base:latest"
 HEPWL_BMKUSEGPU=1
-HEPWL_DOCKERIMAGENAME=et-rift-bmk
+HEPWL_DOCKERIMAGENAME=igwn-et-rift-gpu-bmk
 HEPWL_DOCKERIMAGETAG=ci-v0.1
 HEPWL_CVMFSREPOS=NONE
 HEPWL_BUILDARCH="x86_64"
 HEPWL_EXTEND_SFT_SPEC=""
-HEPWL_BUILDARCH="x86_64,aarch64"
