@@ -1,0 +1,29 @@
+This workload executes the RIFT pipeline -- an algorithm to perform Rapid parameter
+Inference on gravitational wave sources via Iterative Fitting.
+The source code of the pipeline can be found at https://git.ligo.org/rapidpe-rift/rift.
+It is released under the MIT license, as documented in the
+LICENSE.md file at the above repository.
+
+The likelihood evaluations per second is used as the reported 'wl-scores'.
+Detailed statistics are reported in 'wl-stats' and contain the
+mean, median, maximum, minimum, and total number of copies run.
+
+Pipeline authors:
+- Anjali Yelikar
+- Caitlin Rose
+- Daniel Wysocki
+- Halnnah Gallagher
+- Ignacio Magana
+- Jacob Lange
+- Kately Wagner
+- Patrick Brady
+- Richard O'Shaughnessy
+- Richard Udall
+- Sean Fanning
+- Vinaya Valsan
+- Yu-Kuang Chu
+
+Workload authors:
+- Domenico Giordano
+- Georgy Skorobogatov
+- Gonzalo Merino
