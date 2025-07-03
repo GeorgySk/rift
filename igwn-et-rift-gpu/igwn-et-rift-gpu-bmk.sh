@@ -44,33 +44,6 @@ function doOne(){
   else
     echo "[doOne ($1)] $(date) From EXTRA_ARGS: cpuorgpus='${cpuorgpus}'"
   fi
-  if [ "${cpuorgpus}" != "--cpu" ]; then
-    # Test if a GPU exists
-    # [NB: if a GPU physically exists but nvidia-smi fails, then /dev will still contain nvidia*]
-    # See https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#device-nodes
-    if ls /dev | grep nvidia > /dev/null; then
-      echo "[doOne ($1)] $(date) cpuorgpus=${cpuorgpus} and a GPU is installed on this system (/dev/nvidia* found)"
-      if [ "$NCOPIES" != "1" ]; then
-        # Issue a warning not an error: the GPU can be shared across many processes/copies, but throughput is slower, eg lose 10% on 4 copies
-        echo "[doOne ($1)] $(date) WARNING! NCOPIES=$NCOPIES slows down benchmarks on one GPU: a single copy ('-c 1') is recommended"
-      fi
-    else
-      echo "[doOne ($1)] $(date) ERROR! cpuorgpus=${cpuorgpus} but there is no GPU: there is no benchmark to run"
-      status=1; echo "[doOne ($1)] $(date) completed (status=${status})"; return ${status}
-    fi
-    # Set up CUDA
-    export CUDA_HOME=/usr/local/cuda-12.2
-    export PATH=${CUDA_HOME}/bin:${PATH}
-  fi
-  # Configure WL copy
-  if [ ! -d /bmk/build/et ]; then
-    echo "[doOne ($1)] $(date) ERROR! et workload not found in /bmk/build/et"
-    status=1; echo "[doOne ($1)] $(date) completed (status=${status})"; return ${status}
-  else
-    echo "[doOne ($1)] $(date) et workload found in /bmk/build/et"
-    echo "[doOne ($1)] $(date) copy /bmk/build/et into ${workDir}/et"
-    ln -sf /bmk/build/et ${workDir}/et # faster than copying
-  fi
   # Setup WL copy
   SECONDS=0
   source /bmk/build/et/rift/.travis/test-run.sh \
