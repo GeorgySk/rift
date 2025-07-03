@@ -53,7 +53,7 @@ def parse_results(baseWDir, significant_digits=5):
                                             if (m := re.match(r'iteration_(\d+)_ile', d))))
         execution_time = next((int(m.group(1))
                                for m in (re.search(r"completed action '.*' in (\d+) seconds", line)
-                                         for line in open(f"{os.getcwd()}/proc_1/out_{i + 1}.log"))
+                                         for line in open(f"{os.getcwd()}/proc_{i + 1}/out_{i + 1}.log"))
                                if m))
         likelihoods_per_sec = likelihood_estimations_count / execution_time
         scores.append(likelihoods_per_sec)
