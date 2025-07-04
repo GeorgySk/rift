@@ -47,10 +47,10 @@ def parse_results(baseWDir, significant_digits=5):
 
     # Each copy generates an output file
     for i in range(ncopies):
-        likelihood_estimations_count = max((int(m.group(1))
-                                            for d in os.listdir(
-            '/bmk/build/et/rift/.travis/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency')
-                                            if (m := re.match(r'iteration_(\d+)_ile', d))))
+        likelihood_estimations_count = next(int(m.group(1))
+                                            for line in open(f"proc_{i + 1}/out_{i + 1}.log")
+                                            if (m := re.search(r"likelihood_estimations_count\s*=\s*(\d+)",
+                                                               line)))
         execution_time = next((int(m.group(1))
                                for m in (re.search(r"completed action '.*' in (\d+) seconds", line)
                                          for line in open(f"{os.getcwd()}/proc_{i + 1}/out_{i + 1}.log"))

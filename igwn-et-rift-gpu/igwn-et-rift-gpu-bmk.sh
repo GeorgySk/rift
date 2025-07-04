@@ -44,14 +44,38 @@ function doOne(){
   else
     echo "[doOne ($1)] $(date) From EXTRA_ARGS: cpuorgpus='${cpuorgpus}'"
   fi
-  # Setup WL copy
+  cp -r /bmk/build/et/rift/.travis/ILE-GPU-Paper ${workDir}
+  cd ILE-GPU-Paper/demos/
+  make test_workflow_batch_gpu_lowlatency
+  cd test_workflow_batch_gpu_lowlatency
+  # force standard code path
+  switcheroo '--maximize-only '  ' --force-xpy ' command-single.sh
+  # Reduce number of analyses for this worker to 1, to reduce runtime
+  switcheroo '\$\(macrongroup\)' 1  command-single.sh
+  # new format for n-events-to-analyze.  Backstop
+  alias macrongroup='echo 1'
+  echo 'echo 1' > macrongroup; chmod a+x macrongroup; PATH=${PATH}:`pwd`
+  # Reduce the number of points investigated by x100
+  switcheroo 'n-max 2000000' 'n-max 50000' command-single.sh
+  # Calculate number of log-likelihood estimations
   SECONDS=0
-  source /bmk/build/et/rift/.travis/test-run.sh \
-    >> ${workDir}/out_$1.log 2> >(tee -a ${workDir}/out_$1.log >&2)
+  source ./command-single.sh >> ${workDir}/out_$1.log 2> >(tee -a ${workDir}/out_$1.log >&2)
   status=${?}
   duration=$SECONDS
+  est_count=0
+  for dir in ${workDir}/ILE-GPU-Paper/demos/test_workflow_batch_gpu_lowlatency/*; do
+      basename=$(basename "$dir")
+      if [[ $basename =~ iteration_([0-9]+)_ile ]]; then
+          num=${BASH_REMATCH[1]}
+          if (( num > est_count )); then
+              est_count=$num
+          fi
+      fi
+  done
   echo "[doOne ($1)] $(date) current status=$status: completed action '${action}' in ${duration} seconds"
   echo "[doOne ($1)] $(date) current status=$status: completed action '${action}' in ${duration} seconds" | tee -a ${workDir}/out_$1.log
+  echo "[doOne ($1)] $(date) likelihood_estimations_count = $est_count"
+  echo "[doOne ($1)] $(date) likelihood_estimations_count = $est_count" | tee -a ${workDir}/out_$1.log
   echo "[doOne ($1)] $(date) completed (status=${status})"
   # Return 0 if this workload copy was successful, 1 otherwise
   return ${status}
