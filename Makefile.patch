@@ -1,0 +1,30 @@
+diff --git a/demos/Makefile b/demos/Makefile
+index e8f4429..67513d2 100644
+--- a/demos/Makefile
++++ b/demos/Makefile
+@@ -13,7 +13,7 @@ ILE_MEM=2048
+ CIP_MEM=2048
+ 
+ 
+-EVENT_TIME=1000000014.236547946
++EVENT_TIME=1379390836.1
+ APPROX=SEOBNRv4
+ APPROX_BNS=TaylorT4
+ 
+@@ -53,13 +53,13 @@ MC_RANGE_BH=[23,35]
+ test_workflow_nobatch: Makefile HLV-ILIGO_PSD.xml.gz zero_noise.cache
+ 	(mkdir $@; exit 0)
+ #	(cd $@; echo X  --parameter mc --parameter-range '[30,60]' --parameter eta --parameter-range '[0.2,0.24999]' --grid-cartesian-npts ${NPTS_IT} --skip-overlap --fname overlap-grid-0 > args_grid.txt )
+-	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
++	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap --approx IMRPhenomXPHM --l-max 4
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X  ${STANDARD_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0 > args_ile.txt)
++	(cd $@; echo X  ${STANDARD_ILE_OPTS} --d-prior cosmo_sourceframe --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0 --srate 16384 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ #	(cd $@; ls ${PWD}/*psd.xml.gz  ${PWD}/*.cache  > file_names_transfer.txt)
+-	(cd $@;  create_event_parameter_pipeline_BasicIteration  --input-grid overlap-grid-0.xml.gz --ile-exe `which integrate_likelihood_extrinsic`   --ile-args args_ile.txt --cip-args args_cip.txt  --test-args args_test.txt --plot-args args_plot.txt --request-memory-CIP ${CIP_MEM} --request-memory-ILE ${ILE_MEM}  --input-grid ${PWD}/overlap-grid.xml.gz --n-samples-per-job ${NPTS_IT} --working-directory ${PWD}/$@  --n-iterations ${N_IT} )
++	(cd $@;  create_event_parameter_pipeline_BasicIteration --ile-n-events-to-analyze 300 --input-grid overlap-grid-0.xml.gz --ile-exe `which integrate_likelihood_extrinsic`   --ile-args args_ile.txt --cip-args args_cip.txt  --test-args args_test.txt --plot-args args_plot.txt --request-memory-CIP ${CIP_MEM} --request-memory-ILE ${ILE_MEM}  --input-grid ${PWD}/overlap-grid.xml.gz --n-samples-per-job ${NPTS_IT} --working-directory ${PWD}/$@  --n-iterations ${N_IT} )
+ # --transfer-file-list file_names_transfer.txt
+ 
+ 

@@ -73,3 +73,6 @@ RUN alias python=python3
 
 RUN git clone https://git.ligo.org/rapidpe-rift/rift.git /bmk/build/et/rift
 RUN git clone https://github.com/oshaughn/ILE-GPU-Paper.git /bmk/build/et/rift/.travis/ILE-GPU-Paper
+# apply Makefile.patch to use ET-specific input data
+COPY Makefile.patch /tmp/Makefile.patch
+RUN cd /bmk/build/et/rift/.travis/ILE-GPU-Paper && git apply /tmp/Makefile.patch
