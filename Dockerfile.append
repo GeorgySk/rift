@@ -13,29 +13,7 @@ RUN yum install -y \
     cuda && \
     yum clean all
 
-# install Python according to https://wiki.crowncloud.net/?How_to_Install_Python_3_10_on_AlmaLinux_9
-RUN dnf install -y wget yum-utils make gcc openssl-devel bzip2-devel libffi-devel zlib-devel
-RUN dnf update -y
-RUN wget https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz && \
-    tar xzf Python-3.10.5.tgz && \
-    cd Python-3.10.5 && \
-    ./configure --with-system-ffi --with-computed-gotos --enable-loadable-sqlite-extensions && \
-    make -j ${nproc} && \
-    make altinstall
-
 RUN dnf install -y glibc-langpack-en
-
-# removed build-essential. Is it necessary?
-RUN yum install -y \
-    cmake \
-    g++ \
-    wget \
-    python3-pip \
-    curl \
-    bc \
-    git
-
-# removed locale-gen en_US.UTF-8
 
 RUN ln -s /usr/bin/python3.10 /usr/local/bin/python3
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
@@ -47,32 +25,18 @@ RUN cd /opt && \
     cd installed_RIFT && \
     git clone https://github.com/oshaughn/research-projects-RIT.git && \
     cd research-projects-RIT && \
-    pip3 install --upgrade pip && \
-    pip3 install --upgrade setuptools --break-system-packages && \
-    pip3 install -e .
+    pip install --upgrade pip && \
+    pip install --upgrade setuptools --break-system-packages && \
+    pip install -e .
 
 # pyseobnr
 RUN yum install gsl-devel -y
 RUN dnf install fftw-devel -y
-RUN pip3 install pyseobnr
-
-# Install additional Python packages
-RUN pip3 install asimov>=0.5.6 \
-    asimov-gwdata>=0.4.0 \
-    cupy-cuda11x \
-    gwdatafind==1.2.0 \
-    gwosc>=0.7.1 \
-    lalsuite>=7.26 \
-    numpy>=1.24.4 \
-    natsort \
-    pybind11>=2.12 \
-    scipy>=1.9.3
-
-# Set environment variables
-RUN alias python=python3
+RUN pip install pyseobnr
 
 RUN git clone https://git.ligo.org/rapidpe-rift/rift.git /bmk/build/et/rift
 RUN git clone https://github.com/oshaughn/ILE-GPU-Paper.git /bmk/build/et/rift/.travis/ILE-GPU-Paper
+
 # apply Makefile.patch to use ET-specific input data
 COPY Makefile.patch /tmp/Makefile.patch
 RUN cd /bmk/build/et/rift/.travis/ILE-GPU-Paper && git apply /tmp/Makefile.patch
