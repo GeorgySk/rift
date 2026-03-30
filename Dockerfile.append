@@ -15,7 +15,6 @@ RUN yum install -y \
 
 RUN dnf install -y glibc-langpack-en
 
-RUN ln -s /usr/bin/python3.10 /usr/local/bin/python3
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
 RUN yum install -y python3-devel
