@@ -1,5 +1,5 @@
 diff --git a/demos/Makefile b/demos/Makefile
-index e8f4429..67513d2 100644
+index e8f4429..c867cbc 100644
 --- a/demos/Makefile
 +++ b/demos/Makefile
 @@ -13,7 +13,7 @@ ILE_MEM=2048
@@ -7,24 +7,117 @@ index e8f4429..67513d2 100644
  
  
 -EVENT_TIME=1000000014.236547946
-+EVENT_TIME=1379390836.1
++EVENT_TIME=1126259462
  APPROX=SEOBNRv4
  APPROX_BNS=TaylorT4
  
-@@ -53,13 +53,13 @@ MC_RANGE_BH=[23,35]
- test_workflow_nobatch: Makefile HLV-ILIGO_PSD.xml.gz zero_noise.cache
- 	(mkdir $@; exit 0)
+@@ -55,7 +55,7 @@ test_workflow_nobatch: Makefile HLV-ILIGO_PSD.xml.gz zero_noise.cache
  #	(cd $@; echo X  --parameter mc --parameter-range '[30,60]' --parameter eta --parameter-range '[0.2,0.24999]' --grid-cartesian-npts ${NPTS_IT} --skip-overlap --fname overlap-grid-0 > args_grid.txt )
--	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
-+	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap --approx IMRPhenomXPHM --l-max 4
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
  	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
 -	(cd $@; echo X  ${STANDARD_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0 > args_ile.txt)
-+	(cd $@; echo X  ${STANDARD_ILE_OPTS} --d-prior cosmo_sourceframe --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0 --srate 16384 > args_ile.txt)
++	(cd $@; echo X  ${STANDARD_ILE_OPTS}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0 > args_ile.txt)
  	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
  	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
  #	(cd $@; ls ${PWD}/*psd.xml.gz  ${PWD}/*.cache  > file_names_transfer.txt)
--	(cd $@;  create_event_parameter_pipeline_BasicIteration  --input-grid overlap-grid-0.xml.gz --ile-exe `which integrate_likelihood_extrinsic`   --ile-args args_ile.txt --cip-args args_cip.txt  --test-args args_test.txt --plot-args args_plot.txt --request-memory-CIP ${CIP_MEM} --request-memory-ILE ${ILE_MEM}  --input-grid ${PWD}/overlap-grid.xml.gz --n-samples-per-job ${NPTS_IT} --working-directory ${PWD}/$@  --n-iterations ${N_IT} )
-+	(cd $@;  create_event_parameter_pipeline_BasicIteration --ile-n-events-to-analyze 300 --input-grid overlap-grid-0.xml.gz --ile-exe `which integrate_likelihood_extrinsic`   --ile-args args_ile.txt --cip-args args_cip.txt  --test-args args_test.txt --plot-args args_plot.txt --request-memory-CIP ${CIP_MEM} --request-memory-ILE ${ILE_MEM}  --input-grid ${PWD}/overlap-grid.xml.gz --n-samples-per-job ${NPTS_IT} --working-directory ${PWD}/$@  --n-iterations ${N_IT} )
- # --transfer-file-list file_names_transfer.txt
+@@ -67,7 +67,7 @@ test_workflow_batch_gpu: Makefile HLV-ILIGO_PSD.xml.gz zero_noise.cache
+ 	(mkdir $@; exit 0)
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X   ${STANDARD_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0 > args_ile.txt)
++	(cd $@; echo X   ${STANDARD_ILE_OPTS}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2 --composite-file all.net --plot-1d-extra --ci-list [0.9] --truth-file ${PWD}/mdc.xml.gz  > args_plot.txt)
+ #	(cd $@; ls ${PWD}/*psd.xml.gz  ${PWD}/*.cache  > file_names_transfer.txt)
+@@ -84,7 +84,7 @@ test_workflow_batch_gpu_lowlatency: Makefile HLV-ILIGO_PSD.xml.gz zero_noise.cac
+ 	(mkdir $@; exit 0)
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X   ${STANDARD_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${STANDARD_ILE_OPTS}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ #	(cd $@; ls ${PWD}/*psd.xml.gz  ${PWD}/*.cache  > file_names_transfer.txt)
+@@ -96,7 +96,7 @@ test_workflow_batch_gpu_lowlatency_PRP: Makefile HLV-ILIGO_PSD.xml.gz zero_noise
+ 	(mkdir $@; exit 0)
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ 	(cd $@; echo ${PWD}/HLV-ILIGO_PSD.xml.gz  >  file_names_transfer.txt)
+@@ -106,7 +106,7 @@ test_workflow_batch_gpu_lowlatency_singularity: Makefile HLV-ILIGO_PSD.xml.gz ze
+ 	(mkdir $@; exit 0)
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ 	(cd $@; ls ${PWD}/HLV-ILIGO_PSD.xml.gz  >  file_names_transfer.txt)
+@@ -116,7 +116,7 @@ test_workflow_batch_gpu_lowlatency_OSG: Makefile HLV-ILIGO_PSD.xml.gz zero_noise
+ 	(mkdir $@; exit 0)
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ 	(cd $@; ls ${PWD}/HLV-ILIGO_PSD.xml.gz  >  file_names_transfer.txt)
+@@ -127,7 +127,7 @@ test_workflow_batch_nogpu_lowlatency_OSG: Makefile HLV-ILIGO_PSD.xml.gz zero_noi
+ 	(mkdir $@; exit 0)
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${STANDARD_ILE_OPTS_SINGULARITY}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ 	(cd $@; ls ${PWD}/HLV-ILIGO_PSD.xml.gz  >  file_names_transfer.txt)
+@@ -138,7 +138,7 @@ test_workflow_batch_gpu_lowlatency_extrinsic: Makefile HLV-ILIGO_PSD.xml.gz zero
+ 	(mkdir $@; exit 0)
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH} --parameter delta_mc --parameter-range '[0.0,0.5]' --grid-cartesian-npts ${NPTS_START} --skip-overlap
+ 	(cd $@; echo X --mc-range ${MC_RANGE_BH}     --eta-range '[0.20,0.24999]' --parameter mc --parameter-implied eta --parameter-nofit delta_mc  --fit-method gp --verbose  --lnL-offset ${LNL_OFFSET} --cap-points 12000  --n-output-samples 10000 --no-plots --n-eff 10000  > args_cip.txt)
+-	(cd $@; echo X   ${STANDARD_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${STANDARD_ILE_OPTS}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ #	(cd $@; ls ${PWD}/*psd.xml.gz  ${PWD}/*.cache  > file_names_transfer.txt)
+@@ -167,7 +167,7 @@ test_workflow_batch_gpu_SEOBNRv3: Makefile HLV-ILIGO_PSD.xml.gz zero_noise.cache
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH_SPIN} --parameter delta_mc  --parameter-range '[0.0,0.7]' --parameter chieff_aligned --parameter-range [-0.8,0.8] --grid-cartesian-npts 2000 --skip-overlap --approx SEOBNRv3
+ 	(cd $@; echo 5  ${PRECESSING_CIP_OPTS_BASE}  --parameter mc --parameter-implied eta --parameter-nofit delta_mc   --parameter-implied xi --parameter-nofit s1z --parameter-nofit s2z  --parameter-nofit s1x --parameter-nofit s1y --parameter-nofit s2x --parameter-nofit s2y   --lnL-offset 50  > args_cip_list.txt)
+ 	(cd $@; echo 5 ${PRECESSING_CIP_OPTS_BASE} --mc-range ${MC_RANGE_BH_SPIN}   --parameter mc --parameter-implied eta --parameter-nofit delta_mc   --parameter-implied xi --parameter-implied chiMinus --parameter-nofit s1z --parameter-nofit s2z  --parameter s1x --parameter s1y --parameter s2x --parameter s2y   --lnL-offset 25   >> args_cip_list.txt)
+-	(cd $@; echo X   ${PRECESSING_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${PRECESSING_ILE_OPTS}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ #	(cd $@; ls ${PWD}/*psd.xml.gz  ${PWD}/*.cache  > file_names_transfer.txt)
+@@ -181,7 +181,7 @@ test_workflow_batch_nogpu_SEOBNRv3: Makefile HLV-ILIGO_PSD.xml.gz zero_noise.cac
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH_SPIN} --parameter delta_mc  --parameter-range '[0.0,0.7]' --parameter chieff_aligned --parameter-range [-0.8,0.8] --grid-cartesian-npts 2000 --skip-overlap --approx SEOBNRv3
+ 	(cd $@; echo 5  ${PRECESSING_CIP_OPTS_BASE}  --parameter mc --parameter-implied eta --parameter-nofit delta_mc   --parameter-implied xi --parameter-nofit s1z --parameter-nofit s2z  --parameter-nofit s1x --parameter-nofit s1y --parameter-nofit s2x --parameter-nofit s2y   --lnL-offset 50  > args_cip_list.txt)
+ 	(cd $@; echo 5 ${PRECESSING_CIP_OPTS_BASE} --mc-range ${MC_RANGE_BH_SPIN}   --parameter mc --parameter-implied eta --parameter-nofit delta_mc   --parameter-implied xi --parameter-implied chiMinus --parameter-nofit s1z --parameter-nofit s2z  --parameter s1x --parameter s1y --parameter s2x --parameter s2y   --lnL-offset 25   >> args_cip_list.txt)
+-	(cd $@; echo X   ${PRECESSING_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${PRECESSING_ILE_OPTS}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ #	(cd $@; ls ${PWD}/*psd.xml.gz  ${PWD}/*.cache  > file_names_transfer.txt)
+@@ -194,7 +194,7 @@ test_workflow_batch_nogpu_SEOBNRv3_OSG: Makefile HLV-ILIGO_PSD.xml.gz zero_noise
+ 	util_ManualOverlapGrid.py --parameter mc --parameter-range ${MC_RANGE_BH_SPIN} --parameter delta_mc  --parameter-range '[0.0,0.5]' --parameter chieff_aligned --parameter-range [-0.5,0.5] --grid-cartesian-npts 2000 --skip-overlap --approx SEOBNRv3
+ 	(cd $@; echo 5  ${PRECESSING_CIP_OPTS_BASE}  --parameter mc --parameter-implied eta --parameter-nofit delta_mc   --parameter-implied xi --parameter-nofit s1z --parameter-nofit s2z  --parameter-nofit s1x --parameter-nofit s1y --parameter-nofit s2x --parameter-nofit s2y   --lnL-offset 50  > args_cip_list.txt)
+ 	(cd $@; echo 5 ${PRECESSING_CIP_OPTS_BASE} --mc-range ${MC_RANGE_BH_SPIN}   --parameter mc --parameter-implied eta --parameter-nofit delta_mc   --parameter-implied xi --parameter-implied chiMinus --parameter-nofit s1z --parameter-nofit s2z  --parameter s1x --parameter s1y --parameter s2x --parameter s2y   --lnL-offset 25   >> args_cip_list.txt)
+-	(cd $@; echo X   ${PRECESSING_ILE_OPTS}  --data-start-time 1000000008 --data-end-time 1000000016 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
++	(cd $@; echo X   ${PRECESSING_ILE_OPTS}  --data-start-time 1126259452 --data-end-time 1126259472 --inv-spec-trunc-time 0  --no-adapt-after-first --no-adapt-distance --srate 4096 > args_ile.txt)
+ 	(cd $@; echo X  --always-succeed --method lame  --parameter m1 > args_test.txt)
+ 	(cd $@; echo X  --parameter m1 --parameter m2  > args_plot.txt)
+ 	(cd $@; ls ${PWD}/*PSD.xml.gz    > file_names_transfer.txt)
+@@ -206,8 +206,8 @@ test_workflow_batch_nogpu_SEOBNRv3_OSG: Makefile HLV-ILIGO_PSD.xml.gz zero_noise
+ ###
  
- 
+ # 256 sec, starting at event time minus about 256, plus 10
+-START_BNS=999999768
+-STOP_BNS=1000000024
++START_BNS=1126259452
++STOP_BNS=1126259472
+ MC_RANGE_BNS='[1.1962,1.1970]' 
+ LNL_CUT=120  # based on peak lnL of 400, this is useful
+ LNL_OFFSET=120 # because we are fitting in low dimensions, we should keep more.
